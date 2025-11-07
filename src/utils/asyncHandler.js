@@ -24,3 +24,29 @@ const asyncHandler = (requestHandler) => {
 };
 
 export default asyncHandler;
+
+// User sends request
+//        ↓
+// Route handler is called (wrapped inside asyncHandler)
+//        ↓
+// asyncHandler runs your controller function
+//        ↓
+// ┌───────────────────────────────────────────────┐
+// │ Inside Controller (for example: getUser)      │
+// │                                               │
+// │   If everything is OK → create ApiResponse    │
+// │   and return success to user                  │
+// │                                               │
+// │   If something goes wrong → throw ApiError    │
+// └───────────────────────────────────────────────┘
+//        ↓
+// If ApiError is thrown → asyncHandler catches it
+//        ↓
+// asyncHandler calls next(error)
+//        ↓
+// Error is passed to the **Error Handler Middleware**
+//        ↓
+// Error Handler Middleware formats and sends
+// a clean, user-friendly error response.
+//        ↓
+// Client receives a **clear and consistent** error message.
