@@ -23,7 +23,7 @@ const asyncHandler = (requestHandler) => {
     };
 };
 
-export default asyncHandler;
+export {asyncHandler};
 
 // User sends request
 //        ↓
