@@ -44,12 +44,18 @@ const userSchema = new Schema({
     }
 }, { timestamps: true })
 
+// A "hook" that runs *before* any .save() command on this schema.
 userSchema.pre("save", async function (next) {
-    if (!this.isModified("password")) return next()
 
-    this.password = await bcrypt.hash(this.password, 10)
-    next()
-})
+    // Why? To skip hashing if password hasn't changed.
+    if (!this.isModified("password")) return next();
+
+    // What? Hash the plain-text password. 'this' is the user document.
+    this.password = await bcrypt.hash(this.password, 10);
+
+    // What? Continue with the actual .save() operation.
+    next();
+});
 
 userSchema.methods.isPasswordCorrect = async function (password) {
     return await bcrypt.compare(password, this.password)
